@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Zapatos usados de marca</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style id="app-style">
+:root{--bg:#eef0f4;--card:#fff;--ink:#101828;--mute:#5b6577;--line:#d9dde6;--accent:#2540e8;--tag:#ffd23f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1320;--card:#182033;--ink:#f1f4fa;--mute:#9aa5bb;--line:#2a3550}}
+:root[data-theme="dark"]{--bg:#0e1320;--card:#182033;--ink:#f1f4fa;--mute:#9aa5bb;--line:#2a3550}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Archivo',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;line-height:1.45;padding-bottom:40px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+h1{font-size:clamp(28px,7vw,46px);font-weight:800;margin:26px 0 6px;letter-spacing:-.02em;line-height:1.05}
+.sub{color:var(--mute);margin:0 0 14px;max-width:56ch}
+button,input,textarea,select{font-family:inherit;font-size:15px;color:var(--ink)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible,.card:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tools{display:flex;gap:8px;margin:6px 0 10px;flex-wrap:wrap}.tools input{flex:1 1 200px;width:auto}.tools select{flex:0 1 210px}
+select{border:1.5px solid var(--line);background:var(--card);border-radius:8px;padding:9px 10px}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:3px 0 6px}
+.fl{align-self:center;flex:0 0 auto;color:var(--mute);font-size:13px;font-weight:700}
+.chip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer;color:var(--ink)}
+a.chip{text-decoration:none}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--aink,#fff)}
+.more{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;margin:6px 0;max-width:520px}
+.count{color:var(--mute);font-size:14px;font-weight:600;margin:12px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin:12px 0 30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer}
+.card.off{opacity:.55}
+.pic{position:relative;aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden}.pic>svg{width:62%}
+.pic>img{width:100%;height:100%;object-fit:cover;display:block}
+.cnt{position:absolute;right:10px;top:10px;background:#101828cc;color:#fff;font-weight:700;font-size:12px;padding:3px 8px;border-radius:8px;pointer-events:none}
+.price{position:absolute;right:10px;bottom:10px;background:var(--tag);color:var(--tagink,#101828);font-weight:800;font-size:20px;padding:4px 10px;border-radius:8px;pointer-events:none}
+.badge{position:absolute;left:10px;top:10px;background:#101828;color:#fff;font-weight:800;font-size:13px;padding:4px 9px;border-radius:8px;pointer-events:none}
+.badge.new{background:var(--accent);color:var(--aink,#fff)}
+.body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+.name{font-weight:800;font-size:17px;margin:0}.est{color:var(--mute);font-size:14px;margin:0}.est.sm{font-size:12.5px}
+.det{display:flex;flex-wrap:wrap;gap:6px;margin:0;align-items:center}
+.sz{font-size:12.5px;font-weight:600;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.cmx{margin:0;font-size:13px;color:var(--mute)}.cmx b{font-size:20px;color:var(--ink)}
+.pill{display:inline-block;font-size:12.5px;font-weight:800;padding:3px 9px;border-radius:999px;border:1.5px solid var(--line)}
+.c0{background:#d8f5e3;color:#0b5a2a;border-color:#b9e8cc}.c1{background:#dfe8ff;color:#1e3a9e;border-color:#c4d3ff}.c2{background:#fff0c9;color:#7a5200;border-color:#f3dc9b}.c3{background:#fde0d6;color:#8a2c0d;border-color:#f6c3b1}
+.btn{margin-top:auto;display:block;text-align:center;text-decoration:none;border:0;background:var(--accent);color:var(--aink,#fff);font-weight:800;padding:11px 12px;border-radius:10px;cursor:pointer}
+.btn.sec{background:transparent;color:var(--ink);border:1.5px solid var(--line)}.btn.dis{background:var(--line);color:var(--mute);pointer-events:none}
+.row{display:flex;gap:8px;margin-top:8px}.row .btn{margin:0;flex:1;padding:9px}
+.empty{text-align:center;color:var(--mute);padding:40px 0}
+.lnk{background:none;border:0;color:var(--mute);font-size:13px;text-decoration:underline;cursor:pointer;padding:6px 0}
+.dd .lnk{color:var(--accent);font-weight:600}
+.trust{margin:10px 0 24px}.trust h3{margin:0 0 10px;font-size:18px}
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.tg div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}.tg strong{display:block;margin-bottom:4px}.tg p{margin:0;color:var(--mute);font-size:14px}
+.foot{color:var(--mute);font-size:13px;padding-bottom:20px}.soc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.foot p{margin:0 0 4px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;justify-content:center;flex-wrap:wrap;z-index:5}
+.bar .btn{margin:0;padding:10px 14px;flex:0 1 auto}
+.mb{align-self:center;font-size:12px;color:var(--mute);font-weight:600}.mb.warn{color:#c2410c}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;display:grid;gap:12px;max-width:640px}
+label{display:grid;gap:4px;font-weight:600;font-size:14px}label small{font-weight:400;color:var(--mute)}
+.hint{color:var(--mute);font-size:13px;margin:0}
+input,textarea{border:1.5px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 10px;width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal{position:fixed;inset:0;background:#0009;z-index:50;display:grid;place-items:center;padding:14px;overflow:auto}
+.modal .panel{margin:0;width:100%;max-height:92vh;overflow:auto}
+.chk{display:flex;gap:8px;align-items:center;font-weight:600}.chk input{width:auto}
+.ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.ph>div{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1.5px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph button{position:absolute;border:0;border-radius:6px;background:#101828cc;color:#fff;font-size:11px;font-weight:700;padding:3px 6px;cursor:pointer}
+.ph .rm{top:3px;right:3px;font-size:14px;line-height:1}.ph .cv{left:3px;bottom:3px}
+.ph .tag{position:absolute;left:3px;bottom:3px;background:var(--tag);color:#101828;font-size:11px;font-weight:800;padding:3px 6px;border-radius:6px}
+.nv{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:0;background:#101828b3;color:#fff;font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0;z-index:2}
+.nv.pv{left:8px}.nv.nx{right:8px}
+.lbx{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:14px;width:40px;height:40px;border-radius:50%;border:0;background:#101828cc;color:#fff;font-size:26px;line-height:1;cursor:pointer;z-index:3}
+.dv{position:fixed;inset:0;z-index:20;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch}
+.dvp{max-width:760px;margin:0 auto;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+.dvx{position:fixed}
+.dvg{position:relative;aspect-ratio:4/3;max-height:62vh;width:100%;background:#0b0f1a;margin-top:0}
+.trk{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.trk::-webkit-scrollbar{display:none}
+.trk img{flex:0 0 100%;width:100%;height:100%;object-fit:contain;scroll-snap-align:center;cursor:zoom-in}
+.thumbs{display:flex;gap:6px;overflow-x:auto;padding:8px 14px}
+.thumbs img{flex:0 0 60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;opacity:.7}
+.thumbs img.on{border-color:var(--accent);opacity:1}
+.dvb{padding:8px 18px;display:grid;gap:12px}
+.big{font-size:26px;line-height:1.15}.p2{font-size:32px;font-weight:800;margin:0}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin:0}.spec dt{color:var(--mute)}.spec dd{margin:0;font-weight:600}
+.lb{position:fixed;inset:0;background:#000e;z-index:30}
+.lbs{position:absolute;inset:0;overflow:auto;display:flex}
+.lbs img{margin:auto;width:100%;height:100%;object-fit:contain;cursor:zoom-in}
+.lbs img.zm{width:240%;height:auto;object-fit:fill;max-width:none;cursor:zoom-out}
+.lbc{top:auto;bottom:calc(14px + env(safe-area-inset-bottom,0px));right:auto;left:50%;transform:translateX(-50%);white-space:nowrap}
+.steps{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px;font-weight:400}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;background:#101828;color:#fff;padding:10px 16px;border-radius:10px;z-index:60;font-weight:600;max-width:90vw;text-align:center}
+details.panel{display:block}details.panel>summary{font-weight:800;cursor:pointer;font-size:16px}details.panel[open]>summary{margin-bottom:12px}details.panel>*:not(summary){margin-top:12px}
+.vars{display:flex;flex-wrap:wrap;gap:6px}.vars .chip{padding:5px 10px;font-size:13px}input[type=color]{padding:2px;height:40px}
+</style></head><body><div id="root"></div>
+<script type="application/json" id="state">{"cfg":{"nombre":"Zapatos usados de marca","tagline":"Cada par es de segunda mano, está limpio y revisado. Toca un par para ver todas sus fotos y pedirlo por WhatsApp.","whatsapp":"50300000000","mensaje":"Hola, me interesa el par {nombre} ({talla}) por {precio}. ¿Sigue disponible?","pie":"Todos los pares son usados de segunda mano.","color":"#2540e8","url":"","fb":"","ig":"","c_revisa":"Cada par se limpia y se revisa antes de publicarlo. Las fotos muestran suela, etiqueta interior, plantilla y cualquier desgaste.","c_cambios":"Cambio por talla dentro de 3 días.","c_pago":"","c_envio":"Entregas en San Salvador y envíos a todo el país."},"items":[{"id":1,"nombre":"Pegasus","marca":"Nike","tallaH":"9","tallaM":"10.5","cm":"27.5","cond":"Muy bueno","estado":"9/10, desgaste leve en la suela","precio":35,"desc":"","fotos":[],"vendido":false,"visible":true,"fecha":1791806400000},{"id":2,"nombre":"Tenis casual blancos","marca":"Adidas","tallaH":"8.5","tallaM":"10","cm":"26.5","cond":"Bueno","estado":"8/10, plantilla nueva","precio":30,"desc":"","fotos":[],"vendido":false,"visible":true,"fecha":1791806400000},{"id":3,"nombre":"Zapato deportivo","marca":"Puma","tallaH":"10","tallaM":"11.5","cm":"28.5","cond":"Como nuevo","estado":"9/10, casi sin uso","precio":45,"desc":"","fotos":[],"vendido":true,"visible":true,"fecha":1791806400000}]}</script>
+<script id="app-script">
+var S,canEdit=false,owner=false,admin=false,authed=false,dirty=false,view='cat',ed=null,art=null,lb=null,dv=null,fmore=false,fails=0,lockT=0,
+F={q:'',talla:'Todas',marca:'',pmin:'',pmax:'',disp:false,orden:'rec'},MAXF=10,DIA=864e5,
+MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
+COL=['#2540e8','#0f8b8d','#c2410c','#6d28d9','#b91c5c'],DEFC='Como nuevo, Muy bueno, Bueno, Con detalles',
+SAMPLE={nombre:'Pegasus',marca:'Nike',cond:'Muy bueno',estado:'9/10',tallaH:'9',tallaM:'10.5',cm:'27.5',precio:35},
+DT={wa:'Pedir por WhatsApp',sold:'Vendido',share:'Compartir',sharetxt:'Mira este par:',nuevo:'Nuevo',more:'Precio y disponibilidad',clear:'Quitar filtros',
+ search:'Buscar marca, modelo o talla',s_rec:'Más recientes',s_pa:'Precio: menor a mayor',s_pd:'Precio: mayor a menor',talla:'Talla',marca:'Marca',todas:'Todas',hombre:'Hombre',mujer:'Mujer',desde:'Precio desde',hasta:'Hasta',solo:'Mostrar solo pares disponibles',
+ c1:'{n} par disponible',cn:'{n} pares disponibles',v1:'{v} vendido',vn:'{v} vendidos',vacio:'Estamos actualizando el catálogo. Vuelve pronto o escríbenos por WhatsApp.',sinres:'No hay pares con esos filtros.',
+ cmnote:'medida del zapato',sp_h:'Talla hombre',sp_m:'Talla mujer',sp_cm:'Medida',sp_est:'Estado',sp_marca:'Marca',nota:'Par usado de segunda mano. Toca una foto para acercarla.',guialink:'¿Cómo medir mi pie?',
+ p_hoy:'Publicado hoy',p_ayer:'Publicado ayer',p_n:'Publicado hace {n} días',p_f:'Publicado el {f}',
+ guiat:'¿Cómo medir mi pie?',guia:'Pega una hoja de papel contra una pared, sobre el piso.\nPárate sobre la hoja con el talón tocando la pared.\nMarca con un lápiz el punto más largo de tu dedo más largo.\nMide en centímetros desde el borde de la hoja hasta la marca. Mide los dos pies y usa el más largo.\nCompara con la “medida del zapato” de cada par. Lo ideal suele ser que el zapato mida entre 1 y 1.5 cm más que tu pie.',guianota:'Mídete al final del día, cuando el pie está más hinchado.',
+ conf:'Compra con confianza',cr_t:'Cómo revisamos cada par',cc_t:'Cambios',cp_t:'Formas de pago',ce_t:'Entrega y envío'},
+G=[['Botones y etiquetas','',[['sold','Texto cuando el par está vendido'],['share','Texto del botón Compartir'],['sharetxt','Texto al compartir un par'],['nuevo','Etiqueta de pares nuevos'],['more','Botón de precio y disponibilidad'],['clear','Botón de quitar filtros']]],
+ ['Buscador y filtros','',[['search','Texto del buscador'],['s_rec','Orden: más recientes'],['s_pa','Orden: precio menor a mayor'],['s_pd','Orden: precio mayor a menor'],['talla','Palabra “Talla”'],['marca','Palabra “Marca”'],['todas','Filtro “Todas”'],['hombre','Palabra “Hombre”'],['mujer','Palabra “Mujer”'],['desde','Precio desde'],['hasta','Precio hasta'],['solo','Casilla de solo disponibles']]],
+ ['Resultados y mensajes','Usa {n} y {v} donde va el número.',[['c1','Contador (1 par)'],['cn','Contador (varios pares)'],['v1','Vendidos (1)'],['vn','Vendidos (varios)'],['vacio','Mensaje si no hay pares',2],['sinres','Mensaje si el filtro no encuentra nada']]],
+ ['Detalle de cada par','',[['cmnote','Texto junto a la medida'],['sp_h','Etiqueta talla hombre'],['sp_m','Etiqueta talla mujer'],['sp_cm','Etiqueta medida'],['sp_est','Etiqueta estado'],['sp_marca','Etiqueta marca'],['nota','Nota bajo las fotos',2],['guialink','Enlace de la guía de medidas']]],
+ ['Fechas de publicación','Usa {n} para los días y {f} para la fecha.',[['p_hoy','Publicado hoy'],['p_ayer','Publicado ayer'],['p_n','Publicado hace varios días'],['p_f','Publicado en una fecha']]],
+ ['Guía para medir el pie','Un paso por línea.',[['guiat','Título'],['guia','Pasos',7],['guianota','Nota final',2]]],
+ ['Sección “Compra con confianza”','Los bloques sin texto no se muestran. Escribe solo lo que de verdad cumples.',[['conf','Título de la sección'],['cr_t','Bloque 1: título'],['c_revisa','Bloque 1: texto',3,'k'],['cc_t','Bloque 2: título'],['c_cambios','Bloque 2: texto',2,'k'],['cp_t','Bloque 3: título'],['c_pago','Bloque 3: texto',2,'k'],['ce_t','Bloque 4: título'],['c_envio','Bloque 4: texto',2,'k']]]];
+function $(i){return document.getElementById(i)}
+function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function plain(s){return String(s==null?'':s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+function norm(p){if(!p.fotos)p.fotos=p.foto?[p.foto]:[];delete p.foto;if(p.tallaH==null&&p.talla!=null)p.tallaH=String(p.talla).replace(/\s*US/i,'');delete p.talla;['tallaH','tallaM','cm','cond','marca','estado','desc'].forEach(function(k){if(p[k]==null)p[k]=''});if(!p.fecha)p.fecha=0;return p}
+function load(){S=JSON.parse($('state').textContent);S.items=S.items.map(norm);var c=S.cfg;['url','fb','ig','pie','c_revisa','c_cambios','c_pago','c_envio','mensajeGen'].forEach(function(k){if(c[k]==null)c[k]=''});if(!c.t)c.t={};if(!c.tag)c.tag='#ffd23f';if(c.mon==null)c.mon='$';if(!c.conds)c.conds=DEFC;if(c.nuevoDias==null)c.nuevoDias=14}
+load();
+function tx(k){var t=S.cfg.t;return t&&t[k]!=null?t[k]:DT[k]}
+function fmt(s,o){return String(s).replace(/\{(\w+)\}/g,function(_,k){return o[k]==null?'':o[k]})}
+function mon(){return S.cfg.mon!=null?S.cfg.mon:'$'}
+function conds(){var a=String(S.cfg.conds||DEFC).split(',').map(function(x){return x.trim()}).filter(Boolean);return a.length?a:DEFC.split(', ')}
+function pcls(c){var i=conds().indexOf(c);return i<0?'':' c'+(i%4)}
+function ink(h){var m=/^#?([0-9a-f]{6})$/i.exec(h||'');if(!m)return '#fff';var n=parseInt(m[1],16);return((n>>16)*.299+((n>>8)&255)*.587+(n&255)*.114)/255>.62?'#101828':'#fff'}
+function theme(){var r=document.documentElement.style;r.setProperty('--accent',S.cfg.color);r.setProperty('--aink',ink(S.cfg.color));r.setProperty('--tag',S.cfg.tag);r.setProperty('--tagink',ink(S.cfg.tag))}
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},3600)}
+function ask(msg,yes){document.body.insertAdjacentHTML('beforeend','<div class="modal" id="ak"><div class="panel"><strong>'+esc(msg)+'</strong><div class="row"><button class="btn sec" id="ak_n">Cancelar</button><button class="btn" id="ak_y">Aceptar</button></div></div></div>');$('ak_n').onclick=function(){$('ak').remove()};$('ak_y').onclick=function(){$('ak').remove();yes()}}
+function shoe(c){return '<svg viewBox="0 0 120 60" aria-hidden="true"><path d="M6 44c0-6 3-9 9-10l22-4c6-1 10-6 13-12 2-4 6-4 8-1 4 6 10 9 18 11l24 6c8 2 12 6 12 12v6H6z" fill="'+c+'"/><rect x="6" y="46" width="108" height="8" rx="4" fill="#fff" opacity=".85"/></svg>'}
+function colr(p){return COL[p.id%COL.length]}
+function ttl(p){var n=p.nombre||'',m=p.marca||'';return m&&plain(n).indexOf(plain(m))<0?m+' '+n:n}
+function tl(p){var a=[];if(p.tallaH)a.push(tx('hombre')+' '+p.tallaH+' US');if(p.tallaM)a.push(tx('mujer')+' '+p.tallaM+' US');return a.join(' / ')}
+function vars(p){return{nombre:ttl(p),marca:p.marca,estado:p.estado,condicion:p.cond,tallaH:p.tallaH,tallaM:p.tallaM,cm:p.cm?p.cm+' cm':'',talla:tl(p),precio:mon()+p.precio}}
+function waNum(){return String(S.cfg.whatsapp||'').replace(/\D/g,'')}
+function link(p){var v=vars(p),m=S.cfg.mensaje.replace(/\{(\w+)\}/g,function(_,k){return v[k]==null?'':v[k]});return 'https://wa.me/'+waNum()+'?text='+encodeURIComponent(m)}
+function prev(){return decodeURIComponent(link(SAMPLE).split('?text=')[1])}
+function esNuevo(p){var n=Number(S.cfg.nuevoDias);if(!(n>0))n=14;return p.fecha&&Date.now()-p.fecha<n*DIA}
+function fechaTxt(p){if(!p.fecha)return '';var d=new Date(p.fecha),n=Math.floor((Date.now()-p.fecha)/DIA);return n<1?tx('p_hoy'):n===1?tx('p_ayer'):n<30?fmt(tx('p_n'),{n:n}):fmt(tx('p_f'),{f:d.getDate()+' '+MES[d.getMonth()]+' '+d.getFullYear()})}
+function show(p){return admin||(p.visible!==false&&!p.ejemplo)}
+function so(a,b){return parseFloat(a)-parseFloat(b)||(a>b?1:-1)}
+function opts(base){var H=[],M=[],B=[];base.forEach(function(p){if(p.tallaH&&H.indexOf(p.tallaH)<0)H.push(p.tallaH);if(p.tallaM&&M.indexOf(p.tallaM)<0)M.push(p.tallaM);if(p.marca&&B.indexOf(p.marca)<0)B.push(p.marca)});H.sort(so);M.sort(so);B.sort(function(a,b){return plain(a)>plain(b)?1:-1});return{H:H,M:M,B:B}}
+function pass(p){
+ if(F.disp&&p.vendido)return false;
+ if(F.marca&&p.marca!==F.marca)return false;
+ if(F.talla!=='Todas'){var v=F.talla.slice(2);if(F.talla.charAt(0)==='H'?p.tallaH!==v:p.tallaM!==v)return false}
+ if(F.pmin!==''&&p.precio<Number(F.pmin))return false;
+ if(F.pmax!==''&&p.precio>Number(F.pmax))return false;
+ if(F.q){var h=plain([ttl(p),p.marca,p.estado,p.desc,p.cond,tl(p),p.cm].join(' '));if(plain(F.q).split(/\s+/).some(function(w){return w&&h.indexOf(w)<0}))return false}
+ return true}
+function sorted(l){var o=F.orden;return l.slice().sort(function(a,b){if(!!a.vendido!==!!b.vendido)return a.vendido?1:-1;if(o==='pa')return a.precio-b.precio;if(o==='pd')return b.precio-a.precio;return(b.fecha||0)-(a.fecha||0)||b.id-a.id})}
+function results(){return sorted(S.items.filter(show).filter(pass))}
+function soc(k,v){v=(v||'').trim();if(!v)return '';if(/^https?:\/\//i.test(v))return v;v=v.replace(/^@/,'');return(k==='ig'?'https://instagram.com/':'https://facebook.com/')+v}
+/* ---------- acceso de administrador ---------- */
+function hex(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
+function unhex(h){var a=new Uint8Array(h.length/2);for(var i=0;i<a.length;i++)a[i]=parseInt(h.substr(i*2,2),16);return a}
+function kdf(pw,salt,it){return crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']).then(function(k){return crypto.subtle.deriveBits({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},k,256)}).then(hex)}
+function mkAuth(u,pw){var s=crypto.getRandomValues(new Uint8Array(16)),it=150000;return kdf(pw,s,it).then(function(h){return{u:u,s:hex(s),h:h,i:it}})}
+function chk(pw){var a=S.cfg.auth;return kdf(pw,unhex(a.s),a.i).then(function(h){return h===a.h})}
+function tokGet(){try{return sessionStorage.getItem('cat_adm')}catch(e){return null}}
+function tokSet(v){try{if(v)sessionStorage.setItem('cat_adm',v);else sessionStorage.removeItem('cat_adm')}catch(e){}}
+function enter(){var m=$('lg');if(m)m.remove();authed=true;tokSet(S.cfg.auth.h);admin=true;render()}
+function loginUI(){var a=S.cfg.auth,su=!a;
+ document.body.insertAdjacentHTML('beforeend','<div class="modal" id="lg"><div class="panel"><strong>'+(su?'Crea tu acceso de administrador':'Iniciar sesión')+'</strong>'+(su?'<p class="hint">Elige un usuario y una contraseña para entrar al panel. Al terminar, guarda y publica para que queden guardados.</p>':'')+
+  '<label>Usuario<input id="lg_u" autocomplete="username"'+(su?'':' value="'+esc(a.u)+'"')+'></label>'+
+  '<label>Contraseña'+(su?'<small>Mínimo 8 caracteres</small>':'')+'<input id="lg_p" type="password" autocomplete="'+(su?'new-password':'current-password')+'"></label>'+(su?'<label>Repite la contraseña<input id="lg_p2" type="password" autocomplete="new-password"></label>':'')+
+  '<div class="row"><button class="btn sec" id="lg_x">Cancelar</button><button class="btn" id="lg_ok">'+(su?'Crear acceso':'Entrar')+'</button></div>'+(su?'':owner?'<button class="lnk" id="lg_f">Olvidé mi contraseña</button>':'<p class="hint">¿Olvidaste la contraseña? Solo el propietario de la página puede restablecerla.</p>')+'</div></div>');
+ $('lg_x').onclick=function(){$('lg').remove()};
+ if($('lg_f'))$('lg_f').onclick=function(){ask('Esto borra el usuario y la contraseña actuales para que crees unos nuevos. ¿Continuar?',function(){S.cfg.auth=null;dirty=true;$('lg').remove();loginUI()})};
+ $('lg_ok').onclick=function(){
+  if(Date.now()<lockT){toast('Demasiados intentos. Espera '+Math.ceil((lockT-Date.now())/1000)+' segundos.');return}
+  var u=$('lg_u').value.trim(),p=$('lg_p').value;
+  if(su){if(u.length<3){toast('El usuario debe tener al menos 3 caracteres.');return}if(p.length<8){toast('La contraseña debe tener al menos 8 caracteres.');return}if(p!==$('lg_p2').value){toast('Las contraseñas no coinciden.');return}
+   return mkAuth(u,p).then(function(x){S.cfg.auth=x;dirty=true;enter();toast('Acceso creado. Guarda y publica para que quede guardado.')},function(){toast('Este navegador no permite crear contraseñas aquí.')})}
+  return chk(p).then(function(ok){if(ok&&u.toLowerCase()===String(S.cfg.auth.u).toLowerCase()){fails=0;enter()}else{fails++;if(fails>=5){lockT=Date.now()+30000;fails=0}toast('Usuario o contraseña incorrectos.')}},function(){toast('No se pudo verificar la contraseña en este navegador.')})}}
+/* ---------- vistas ---------- */
+function render(){
+ document.title=S.cfg.nombre;theme();
+ var h='<div class="wrap"><h1>'+esc(S.cfg.nombre)+'</h1><p class="sub">'+esc(S.cfg.tagline)+'</p>';
+ h+=view==='cfg'?cfgHTML():ctrlHTML()+'<div id="res"></div>'+trustHTML()+footHTML();
+ h+='</div>';if(canEdit&&admin)h+=barHTML();
+ $('root').innerHTML=h;if(view!=='cfg')drawRes()}
+function ctrlHTML(){var base=S.items.filter(show),o=opts(base);
+ if(F.talla!=='Todas'&&(F.talla.charAt(0)==='H'?o.H:o.M).indexOf(F.talla.slice(2))<0)F.talla='Todas';
+ if(F.marca&&o.B.indexOf(F.marca)<0)F.marca='';
+ var c=function(a,v,t,on){return '<button class="chip" '+a+'="'+esc(v)+'" aria-pressed="'+on+'">'+esc(t)+'</button>'};
+ var h='<div class="tools"><input id="q" type="search" placeholder="'+esc(tx('search'))+'" value="'+esc(F.q)+'" aria-label="'+esc(tx('search'))+'"><select id="ord" aria-label="Ordenar">'+[['rec',tx('s_rec')],['pa',tx('s_pa')],['pd',tx('s_pd')]].map(function(x){return '<option value="'+x[0]+'"'+(F.orden===x[0]?' selected':'')+'>'+esc(x[1])+'</option>'}).join('')+'</select></div>';
+ if(o.H.length||o.M.length)h+='<div class="filters"><span class="fl">'+esc(tx('talla'))+'</span>'+c('data-ft','Todas',tx('todas'),F.talla==='Todas')+o.H.map(function(x){return c('data-ft','H:'+x,tx('hombre')+' '+x,F.talla==='H:'+x)}).join('')+o.M.map(function(x){return c('data-ft','M:'+x,tx('mujer')+' '+x,F.talla==='M:'+x)}).join('')+'</div>';
+ if(o.B.length)h+='<div class="filters"><span class="fl">'+esc(tx('marca'))+'</span>'+c('data-fm','',tx('todas'),!F.marca)+o.B.map(function(x){return c('data-fm',x,x,F.marca===x)}).join('')+'</div>';
+ h+='<div class="filters"><button class="chip" data-a="more" aria-pressed="'+fmore+'">'+esc(tx('more'))+'</button></div>';
+ if(fmore)h+='<div class="more"><div class="two"><label>'+esc(tx('desde'))+' ('+esc(mon())+')<input id="pmin" type="number" min="0" inputmode="numeric" value="'+esc(F.pmin)+'"></label><label>'+esc(tx('hasta'))+'<input id="pmax" type="number" min="0" inputmode="numeric" value="'+esc(F.pmax)+'"></label></div><label class="chk"><input type="checkbox" id="fd"'+(F.disp?' checked':'')+'> '+esc(tx('solo'))+'</label></div>';
+ return h}
+function card(p){var b=p.vendido?'<span class="badge">'+esc(tx('sold'))+'</span>':(admin&&p.ejemplo?'<span class="badge">Ejemplo</span>':(admin&&p.visible===false?'<span class="badge">Oculto</span>':(esNuevo(p)?'<span class="badge new">'+esc(tx('nuevo'))+'</span>':'')));
+ var pic=p.fotos.length?'<img src="'+p.fotos[0]+'" alt="'+esc(ttl(p))+'" loading="lazy" decoding="async">':shoe(colr(p));
+ var sz=[];if(p.tallaH)sz.push(tx('hombre')+' '+p.tallaH+' US');if(p.tallaM)sz.push(tx('mujer')+' '+p.tallaM+' US');
+ return '<article class="card'+(p.visible===false||p.ejemplo?' off':'')+'" data-o="'+p.id+'" tabindex="0" role="button" aria-label="'+esc(ttl(p))+'"><div class="pic" style="background:'+colr(p)+'22">'+pic+b+(p.fotos.length>1?'<span class="cnt">'+p.fotos.length+' fotos</span>':'')+'<span class="price">'+esc(mon())+esc(p.precio)+'</span></div><div class="body"><h2 class="name">'+esc(ttl(p))+'</h2>'+
+ '<p class="det">'+(p.cond?'<span class="pill'+pcls(p.cond)+'">'+esc(p.cond)+'</span>':'')+sz.map(function(x){return '<span class="sz">'+esc(x)+'</span>'}).join('')+'</p>'+
+ (p.cm?'<p class="cmx"><b>'+esc(p.cm)+' cm</b> '+esc(tx('cmnote'))+'</p>':'')+(p.estado?'<p class="est">'+esc(p.estado)+'</p>':'')+(p.fecha?'<p class="est sm">'+esc(fechaTxt(p))+'</p>':'')+
+ (p.vendido?'<span class="btn dis">'+esc(tx('sold'))+'</span>':'<a class="btn" href="'+link(p)+'" target="_blank" rel="noopener">'+esc(tx('wa'))+'</a>')+
+ (admin?'<div class="row"><button class="btn sec" data-e="'+p.id+'">Editar</button><button class="btn sec" data-d="'+p.id+'">Borrar</button></div>':'')+'</div></article>'}
+function drawRes(){var el=$('res');if(!el)return;var base=S.items.filter(show),v=results(),d=v.filter(function(p){return!p.vendido}).length,s=v.length-d,h='';
+ if(v.length){var c=[fmt(d===1?tx('c1'):tx('cn'),{n:d})];if(s&&!F.disp)c.push(fmt(s===1?tx('v1'):tx('vn'),{v:s}));h+='<p class="count" aria-live="polite">'+esc(c.join(' · '))+'</p><div class="grid">'+v.map(card).join('')+'</div>'}
+ else if(base.length)h='<div class="empty"><p>'+esc(tx('sinres'))+'</p><button class="btn sec" data-a="clr" style="display:inline-block;margin:0">'+esc(tx('clear'))+'</button></div>';
+ else h='<div class="empty"><p>'+(admin?'Aún no hay pares. Usa “+ Nuevo par”.':esc(tx('vacio')))+'</p></div>';
+ el.innerHTML=h}
+function trustHTML(){var c=S.cfg,b=[[tx('cr_t'),c.c_revisa],[tx('cc_t'),c.c_cambios],[tx('cp_t'),c.c_pago],[tx('ce_t'),c.c_envio]].filter(function(x){return x[1]&&x[1].trim()});if(!b.length)return '';return '<section class="trust"><h3>'+esc(tx('conf'))+'</h3><div class="tg">'+b.map(function(x){return '<div><strong>'+esc(x[0])+'</strong><p>'+esc(x[1])+'</p></div>'}).join('')+'</div></section>'}
+function footHTML(){var c=S.cfg,s=[['WhatsApp','https://wa.me/'+waNum()+(c.mensajeGen?'?text='+encodeURIComponent(c.mensajeGen):'')],['Facebook',soc('fb',c.fb)],['Instagram',soc('ig',c.ig)]].filter(function(x){return x[1]});return '<footer class="foot"><div class="soc">'+s.map(function(x){return '<a class="chip" href="'+esc(x[1])+'" target="_blank" rel="noopener">'+x[0]+'</a>'}).join('')+'</div><p>'+esc(c.pie)+'</p>'+(canEdit&&!admin?'<button class="lnk" data-a="on">Administrar</button>':'')+'</footer>'}
+function fld(f){var k=f[0],isK=f[3]==='k',v=isK?S.cfg[k]:tx(k),at=isK?'data-k="'+k+'"':'data-tx="'+k+'"';return '<label>'+f[1]+(f[2]>1?'<textarea '+at+' rows="'+f[2]+'">'+esc(v)+'</textarea>':'<input '+at+' value="'+esc(v)+'">')+'</label>'}
+function cfgHTML(){var c=S.cfg,a=c.auth,ex=S.items.some(function(p){return p.ejemplo}),
+ T=function(k,l,r,sm){return '<label>'+l+(sm?'<small>'+sm+'</small>':'')+'<textarea data-k="'+k+'" rows="'+r+'">'+esc(c[k])+'</textarea></label>'},
+ I=function(k,l,sm,x){return '<label>'+l+(sm?'<small>'+sm+'</small>':'')+'<input data-k="'+k+'" '+(x||'')+' value="'+esc(c[k])+'"></label>'},
+ V=['nombre','marca','talla','tallaH','tallaM','cm','condicion','estado','precio'];
+ return '<details class="panel" open><summary>Botón de WhatsApp</summary>'+
+ '<label>Texto del botón<input data-tx="wa" value="'+esc(tx('wa'))+'"></label>'+
+ '<label>Mensaje que recibe el cliente en WhatsApp<small>Se escribe solo al abrir el chat. Toca una variable para insertarla donde tengas el cursor.</small><textarea id="msgTa" data-k="mensaje" rows="3">'+esc(c.mensaje)+'</textarea></label>'+
+ '<div class="vars">'+V.map(function(v){return '<button class="chip" data-ins="{'+v+'}">{'+v+'}</button>'}).join('')+'</div>'+
+ '<p class="hint">Así lo verá el cliente: <b id="prev">'+esc(prev())+'</b></p>'+
+ I('whatsapp','Número de WhatsApp','Con código de país, solo números. El Salvador: 503 y tu número.','inputmode="numeric"')+
+ T('mensajeGen','Mensaje del botón de WhatsApp del pie',2,'Para quien te escribe sin elegir un par. Déjalo vacío para no enviar texto.')+
+ '<a class="btn sec" id="probar" target="_blank" rel="noopener" href="'+link(SAMPLE)+'">Probar mensaje en WhatsApp</a></details>'+
+ '<details class="panel" open><summary>Tienda</summary>'+I('nombre','Nombre de la tienda')+T('tagline','Texto de presentación',2,'')+T('pie','Texto al pie',2,'')+
+ I('mon','Símbolo de moneda','','style="max-width:120px"')+I('nuevoDias','Mostrar la etiqueta de pares nuevos durante (días)','','type="number" min="1" style="max-width:120px"')+
+ I('conds','Condiciones disponibles','Separadas por coma. Aparecen al editar un par.')+
+ '<div class="two"><label>Color principal<input type="color" data-k="color" value="'+esc(c.color)+'"></label><label>Color de la etiqueta de precio<input type="color" data-k="tag" value="'+esc(c.tag)+'"></label></div></details>'+
+ '<details class="panel"><summary>Enlace y redes</summary>'+I('url','Enlace público del catálogo','Pégalo cuando lo compartas. Se usa en el botón de compartir de cada par.')+I('fb','Facebook','Enlace o nombre de usuario')+I('ig','Instagram','Enlace o @usuario')+'</details>'+
+ G.map(function(g){return '<details class="panel"><summary>'+g[0]+'</summary>'+(g[1]?'<p class="hint">'+g[1]+'</p>':'')+g[2].map(fld).join('')+'</details>'}).join('')+
+ '<details class="panel"><summary>Acceso de administrador</summary><p class="hint">Usuario actual: <b>'+esc(a?a.u:'sin configurar')+'</b>. Es un candado para entrar al panel desde esta página; no reemplaza el permiso de tu cuenta de Claude.</p>'+
+ (a?'<label>Contraseña actual<input id="ac_p" type="password" autocomplete="current-password"></label>':'')+'<label>Usuario<input id="ac_u" value="'+esc(a?a.u:'')+'"></label><label>Nueva contraseña<small>Mínimo 8 caracteres</small><input id="ac_n" type="password" autocomplete="new-password"></label><label>Repite la nueva contraseña<input id="ac_n2" type="password" autocomplete="new-password"></label><button class="btn sec" data-a="chpw" style="margin:0">Cambiar acceso</button></details>'+
+ '<details class="panel"><summary>Restaurar</summary><button class="btn sec" data-a="rtx" style="margin:0">Restaurar los textos originales</button>'+(ex?'<p class="hint">Los pares de ejemplo solo los ves tú.</p><button class="btn sec" data-a="rmex" style="margin:0">Borrar pares de ejemplo</button>':'')+'</details><div style="height:90px"></div>'}
+function barHTML(){var n=doc().length,h='<div class="bar">'+(view==='cfg'?'<button class="btn sec" data-a="cat">Ver catálogo</button>':'<button class="btn sec" data-a="new">+ Nuevo par</button><button class="btn sec" data-a="cfg">Ajustes</button>');
+ return h+'<button class="btn" data-a="save"'+(dirty?'':' style="opacity:.5"')+'>'+(dirty?'Guardar y publicar':'Sin cambios')+'</button><button class="btn sec" data-a="off">Cerrar sesión</button><span class="mb'+(n>14e6?' warn':'')+'" title="Espacio usado por el catálogo">'+(n/1e6).toFixed(1)+' / 16 MB</span></div>'}
+function shrink(f){return new Promise(function(res){var r=new FileReader();r.onerror=function(){res(null)};r.onload=function(){var im=new Image();im.onerror=function(){res(null)};im.onload=function(){var s=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.7))};im.src=r.result};r.readAsDataURL(f)})}
+function drawPh(){var pv=$('pv');if(!pv||!ed)return;pv.innerHTML=ed.fotos.map(function(s,i){return '<div><img src="'+s+'" alt="Foto '+(i+1)+'">'+(i===0?'<span class="tag">Portada</span>':'<button class="cv" data-pc="'+i+'">Portada</button>')+'<button class="rm" data-px="'+i+'" aria-label="Quitar foto">&times;</button></div>'}).join('');$('pcount').textContent='('+ed.fotos.length+'/'+MAXF+')'}
+function addFiles(list){var arr=Array.prototype.slice.call(list),room=MAXF-ed.fotos.length;
+ if(room<=0){toast('Ya tienes '+MAXF+' fotos. Quita una para agregar otra.');return}
+ if(arr.length>room){toast('Máximo '+MAXF+' fotos por par. Se agregarán solo '+room+'.');arr=arr.slice(0,room)}
+ if(!arr.length)return;
+ $('pbusy').textContent='Procesando '+arr.length+' foto(s)…';
+ arr.reduce(function(pr,f){return pr.then(function(){return shrink(f)}).then(function(d){if(d&&ed&&ed.fotos.length<MAXF)ed.fotos.push(d)})},Promise.resolve()).then(function(){var b=$('pbusy');if(b)b.textContent='';drawPh()})}
+function modal(){var p=ed,cs=conds();if(p.cond&&cs.indexOf(p.cond)<0)cs=cs.concat([p.cond]);
+ var h='<div class="modal" id="md"><div class="panel"><strong>'+(p.id?'Editar par':'Nuevo par')+'</strong>'+
+ '<label>Título<small>Pon marca y modelo. Ej: Nike Pegasus 38</small><input id="f_nombre" value="'+esc(p.nombre)+'"></label>'+
+ '<label>Marca<input id="f_marca" placeholder="Nike, Adidas, Puma…" value="'+esc(p.marca)+'"></label>'+
+ '<div class="two"><label>Talla US hombre<input id="f_h" inputmode="decimal" placeholder="Ej: 9" value="'+esc(p.tallaH)+'"></label><label>Talla US mujer<input id="f_m" inputmode="decimal" placeholder="Ej: 10.5" value="'+esc(p.tallaM)+'"></label></div>'+
+ '<p class="hint">Suele ser mujer = hombre + 1.5, pero varía según la marca. Revisa la etiqueta del zapato.</p>'+
+ '<div class="two"><label>Medida del zapato (cm)<input id="f_cm" inputmode="decimal" placeholder="Ej: 27.5" value="'+esc(p.cm)+'"></label><label>Precio<input id="f_precio" type="number" min="0" value="'+esc(p.precio)+'"></label></div>'+
+ '<p class="hint">Medida: largo de la plantilla, de talón a punta.</p>'+
+ '<label>Condición<select id="f_cond">'+cs.map(function(c){return '<option'+(c===p.cond?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></label>'+
+ '<label>Detalles del estado<input id="f_estado" placeholder="Ej: 9/10, desgaste leve en la suela" value="'+esc(p.estado)+'"></label>'+
+ '<label>Descripción<textarea id="f_desc" rows="3">'+esc(p.desc)+'</textarea></label>'+
+ '<label>Fotos <span id="pcount"></span><small>La primera es la portada. Máximo '+MAXF+' por par.</small><input id="f_foto" type="file" accept="image/*" multiple></label>'+
+ '<p class="hint">Incluye siempre fotos de la suela, la etiqueta interior, la plantilla y cualquier desgaste. Eso da confianza y evita preguntas.</p><p class="hint" id="pbusy"></p><div class="ph" id="pv"></div>'+
+ '<label class="chk"><input type="checkbox" id="f_vend"'+(p.vendido?' checked':'')+'> Marcar como vendido</label><label class="chk"><input type="checkbox" id="f_vis"'+(p.visible!==false?' checked':'')+'> Visible en el catálogo</label>'+
+ '<div class="row"><button class="btn sec" id="m_x">Cancelar</button><button class="btn" id="m_ok">Aceptar</button></div></div></div>';
+ document.body.insertAdjacentHTML('beforeend',h);drawPh();
+ $('f_foto').onchange=function(e){addFiles(e.target.files);e.target.value=''};
+ $('m_x').onclick=function(){$('md').remove();ed=null};
+ $('m_ok').onclick=function(){
+  var dec=function(id){return $(id).value.trim().replace(',','.')};
+  if(!dec('f_h')&&!dec('f_m')){toast('Escribe al menos una talla (hombre o mujer).');return}
+  p.nombre=$('f_nombre').value.trim()||'Sin título';p.marca=$('f_marca').value.trim();p.tallaH=dec('f_h');p.tallaM=dec('f_m');p.cm=dec('f_cm');p.precio=Number($('f_precio').value)||0;p.cond=$('f_cond').value;p.estado=$('f_estado').value.trim();p.desc=$('f_desc').value.trim();p.vendido=$('f_vend').checked;p.visible=$('f_vis').checked;delete p.ejemplo;
+  if(!p.id){p.id=Date.now();p.fecha=p.id;S.items.unshift(p)}else{S.items=S.items.map(function(x){return x.id===p.id?p:x})}
+  dirty=true;$('md').remove();ed=null;render()};}
+function dvOpen(id){if(!S.items.some(function(x){return x.id===id}))return;dv=id;document.body.style.overflow='hidden';dvDraw();var g=$('dv');if(g)g.scrollTop=0}
+function dvDraw(){var p=S.items.find(function(x){return x.id===dv});if(!p){dvClose();return}
+ var o=$('dv');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="dv" id="dv" role="dialog" aria-modal="true" aria-label="'+esc(ttl(p))+'"></div>');o=$('dv')}
+ var f=p.fotos,row=function(l,v){return v?'<dt>'+esc(l)+'</dt><dd>'+esc(v)+'</dd>':''};
+ var cm=p.cm?'<dt>'+esc(tx('sp_cm'))+'</dt><dd class="dd">'+esc(p.cm)+' cm <button class="lnk" data-a="guia">'+esc(tx('guialink'))+'</button></dd>':'';
+ var gl=f.length?'<div class="dvg"><div class="trk" id="dvt">'+f.map(function(s,i){return '<img src="'+s+'" alt="'+esc(ttl(p))+' - foto '+(i+1)+'" data-z="'+i+'"'+(i>1?' loading="lazy"':'')+' decoding="async">'}).join('')+'</div>'+(f.length>1?'<span class="cnt" id="dvc">1/'+f.length+'</span><button class="nv pv" data-n="-1" aria-label="Foto anterior">&#8249;</button><button class="nv nx" data-n="1" aria-label="Foto siguiente">&#8250;</button>':'')+'</div>'+(f.length>1?'<div class="thumbs">'+f.map(function(s,i){return '<img src="'+s+'" alt="Foto '+(i+1)+'" data-t="'+i+'"'+(i?' loading="lazy"':' class="on"')+'>'}).join('')+'</div>':''):'<div class="dvg" style="display:grid;place-items:center;background:'+colr(p)+'22">'+shoe(colr(p))+'</div>';
+ var badges=(p.cond?'<span class="pill'+pcls(p.cond)+'">'+esc(p.cond)+'</span> ':'')+(p.vendido?'<span class="pill">'+esc(tx('sold'))+'</span>':(esNuevo(p)?'<span class="pill c1">'+esc(tx('nuevo'))+'</span>':''));
+ o.innerHTML='<div class="dvp"><button class="lbx dvx" data-dv="x" aria-label="Cerrar">&times;</button>'+gl+'<div class="dvb"><h2 class="name big">'+esc(ttl(p))+'</h2><p class="det">'+badges+'</p><p class="p2">'+esc(mon())+esc(p.precio)+'</p>'+
+ '<dl class="spec">'+row(tx('sp_h'),p.tallaH&&p.tallaH+' US')+row(tx('sp_m'),p.tallaM&&p.tallaM+' US')+cm+row(tx('sp_est'),p.estado)+row(tx('sp_marca'),p.marca)+'</dl>'+
+ (p.desc?'<p style="margin:0">'+esc(p.desc)+'</p>':'')+(tx('nota')?'<p class="hint">'+esc(tx('nota'))+'</p>':'')+(p.fecha?'<p class="hint">'+esc(fechaTxt(p))+'</p>':'')+
+ '<div class="row">'+(p.vendido?'<span class="btn dis">'+esc(tx('sold'))+'</span>':'<a class="btn" href="'+link(p)+'" target="_blank" rel="noopener">'+esc(tx('wa'))+'</a>')+'<button class="btn sec" data-sh="'+p.id+'">'+esc(tx('share'))+'</button></div></div></div>'}
+function dvClose(){var o=$('dv');if(o)o.remove();dv=null;lbClose();document.body.style.overflow=''}
+function lbOpen(i){var p=S.items.find(function(x){return x.id===dv});if(!p||!p.fotos.length)return;lb={f:p.fotos,i:i};lbDraw()}
+function lbDraw(){var o=$('lb');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="lb" id="lb" role="dialog" aria-label="Foto ampliada"></div>');o=$('lb')}
+ o.innerHTML='<div class="lbs" id="lbs"><img src="'+lb.f[lb.i]+'" alt="Foto ampliada" data-zoom="1"></div><button class="lbx" data-lb="x" aria-label="Cerrar">&times;</button>'+(lb.f.length>1?'<button class="nv pv" data-lb="-1" aria-label="Anterior">&#8249;</button><button class="nv nx" data-lb="1" aria-label="Siguiente">&#8250;</button>':'')+'<span class="cnt lbc">'+(lb.i+1)+' / '+lb.f.length+'</span>'}
+function lbClose(){var o=$('lb');if(o)o.remove();lb=null}
+function lbStep(d){lb.i=(lb.i+d+lb.f.length)%lb.f.length;lbDraw()}
+function guia(){var st=String(tx('guia')).split('\n').filter(function(x){return x.trim()});document.body.insertAdjacentHTML('beforeend','<div class="modal" id="gd"><div class="panel"><strong>'+esc(tx('guiat'))+'</strong><ol class="steps">'+st.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ol>'+(tx('guianota')?'<p class="hint">'+esc(tx('guianota'))+'</p>':'')+'<div class="row"><button class="btn" id="gd_x">Cerrar</button></div></div></div>');$('gd_x').onclick=function(){$('gd').remove()}}
+function copyText(t){return new Promise(function(res,rej){var fb=function(){try{var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();var ok=document.execCommand('copy');a.remove();ok?res():rej()}catch(x){rej()}};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(res,fb)}else fb()})}
+function shareMsg(p){var u=(S.cfg.url||'').trim().split('#')[0];return tx('sharetxt')+' '+ttl(p)+' · '+tl(p)+(p.cm?' · '+p.cm+' cm':'')+' · '+mon()+p.precio+(u?'\n'+u+'#par-'+p.id:'')}
+function share(p){var m=shareMsg(p),manual=function(){document.body.insertAdjacentHTML('beforeend','<div class="modal" id="sh"><div class="panel"><strong>Copia y comparte</strong><textarea id="sht" rows="4" readonly>'+esc(m)+'</textarea><div class="row"><button class="btn" id="sh_x">Listo</button></div></div></div>');$('sht').select();$('sh_x').onclick=function(){$('sh').remove()}},
+ cp=function(){copyText(m).then(function(){toast('Mensaje copiado. Pégalo en WhatsApp o en tus redes.')},manual)};
+ if(navigator.share){navigator.share({title:ttl(p),text:m}).catch(function(e){if(!e||e.name!=='AbortError')cp()})}else cp();
+ if(admin&&!(S.cfg.url||'').trim())toast('Agrega el enlace del catálogo en Ajustes para que el mensaje lo incluya.')}
+function doc(){var st=$('app-style').textContent,sc=$('app-script').textContent;
+ return '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>'+esc(S.cfg.nombre)+'</title><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet"><style id="app-style">'+st+'</style></head><body><div id="root"></div><script type="application/json" id="state">'+JSON.stringify(S).replace(/</g,'\\u003c')+'<'+'/script><script id="app-script">'+sc+'<'+'/script></body></html>'}
+function find(id){return S.items.find(function(x){return x.id==id})}
+function markDirty(){dirty=true;var b=document.querySelector('[data-a=save]');if(b){b.style.opacity=1;b.textContent='Guardar y publicar'}}
+document.addEventListener('click',function(e){
+ var tg=e.target;
+ if(tg.id==='lb'||tg.id==='lbs'){lbClose();return}
+ if(tg.closest('a[href]'))return;
+ var t=tg.closest('[data-ft],[data-fm],[data-a],[data-e],[data-d],[data-n],[data-z],[data-t],[data-lb],[data-dv],[data-px],[data-pc],[data-sh],[data-zoom],[data-o],[data-ins]');if(!t)return;
+ var D=t.dataset;
+ if(D.zoom!=null){var s=$('lbs'),r=t.getBoundingClientRect(),fx=(e.clientX-r.left)/r.width,fy=(e.clientY-r.top)/r.height;if(t.classList.contains('zm'))t.classList.remove('zm');else{t.classList.add('zm');s.scrollLeft=fx*t.offsetWidth-s.clientWidth/2;s.scrollTop=fy*t.offsetHeight-s.clientHeight/2}return}
+ if(D.lb){if(D.lb==='x')lbClose();else lbStep(Number(D.lb));return}
+ if(D.ins){var ta=$('msgTa'),a0=ta.selectionStart==null?ta.value.length:ta.selectionStart,a1=ta.selectionEnd==null?a0:ta.selectionEnd;ta.value=ta.value.slice(0,a0)+D.ins+ta.value.slice(a1);S.cfg.mensaje=ta.value;ta.focus();ta.selectionStart=ta.selectionEnd=a0+D.ins.length;markDirty();var pv=$('prev');if(pv)pv.textContent=prev();var pr=$('probar');if(pr)pr.href=link(SAMPLE);return}
+ if(D.ft!=null){F.talla=D.ft;render();return}
+ if(D.fm!=null){F.marca=D.fm;render();return}
+ if(D.n){var k=t.closest('.dvg').querySelector('.trk');k.scrollBy({left:Number(D.n)*k.clientWidth,behavior:'smooth'});return}
+ if(D.t!=null){var k2=$('dvt');k2.scrollTo({left:Number(D.t)*k2.clientWidth,behavior:'smooth'});return}
+ if(D.z!=null){lbOpen(Number(D.z));return}
+ if(D.dv){dvClose();return}
+ if(D.sh){share(find(D.sh));return}
+ if(D.px!=null){ed.fotos.splice(Number(D.px),1);drawPh();return}
+ if(D.pc!=null){var f=ed.fotos.splice(Number(D.pc),1)[0];ed.fotos.unshift(f);drawPh();return}
+ if(D.e){ed=norm(JSON.parse(JSON.stringify(find(D.e))));modal();return}
+ if(D.d){ask('¿Borrar este par?',function(){S.items=S.items.filter(function(x){return x.id!=D.d});dirty=true;render()});return}
+ if(D.o){dvOpen(Number(D.o));return}
+ var a=D.a;
+ if(a==='on'){if(authed){admin=true;render()}else loginUI()}
+ else if(a==='off'){var out=function(){if(dirty){load();dirty=false}admin=false;authed=false;tokSet(null);view='cat';render()};if(dirty)ask('Hay cambios sin guardar. Si cierras sesión se pierden. ¿Cerrar igual?',out);else out()}
+ else if(a==='cfg'){view='cfg';render()}else if(a==='cat'){view='cat';render()}
+ else if(a==='more'){fmore=!fmore;render()}
+ else if(a==='clr'){F.q='';F.talla='Todas';F.marca='';F.pmin='';F.pmax='';F.disp=false;render()}
+ else if(a==='guia')guia();
+ else if(a==='rtx')ask('¿Restaurar todos los textos a su versión original?',function(){S.cfg.t={};dirty=true;render()});
+ else if(a==='rmex')ask('¿Borrar los pares de ejemplo?',function(){S.items=S.items.filter(function(x){return!x.ejemplo});dirty=true;render()});
+ else if(a==='chpw'){var u=$('ac_u').value.trim(),n=$('ac_n').value;
+  if(u.length<3){toast('El usuario debe tener al menos 3 caracteres.');return}if(n.length<8){toast('La nueva contraseña debe tener al menos 8 caracteres.');return}if(n!==$('ac_n2').value){toast('Las contraseñas nuevas no coinciden.');return}
+  (S.cfg.auth?chk($('ac_p').value):Promise.resolve(true)).then(function(ok){if(!ok){toast('La contraseña actual no es correcta.');return}return mkAuth(u,n).then(function(x){S.cfg.auth=x;tokSet(x.h);markDirty();toast('Acceso actualizado. Guarda y publica para aplicarlo.');view='cfg';render()})}).catch(function(){toast('No se pudo cambiar el acceso en este navegador.')})}
+ else if(a==='new'){ed={id:0,nombre:'',marca:'',tallaH:'',tallaM:'',cm:'',cond:conds()[1]||conds()[0],estado:'',precio:'',desc:'',fotos:[],vendido:false,visible:true};modal()}
+ else if(a==='save'){if(!dirty)return;if(!art){toast('No se pudo conectar para guardar. Abre la página con tu cuenta de Claude.');return}
+  var d=doc();if(d.length>15.5e6){toast('El catálogo pesa demasiado. Quita fotos o pares viejos.');return}
+  art.publish(d).then(function(){toast('Publicado')},function(er){toast('No se pudo publicar: '+(er&&er.code||'error'))})}});
+document.addEventListener('input',function(e){var t=e.target,k=t.dataset&&t.dataset.k,x=t.dataset&&t.dataset.tx;
+ if(k||x){if(k)S.cfg[k]=t.value;else S.cfg.t[x]=t.value;markDirty();if(k==='color'||k==='tag')theme();
+  var pv=$('prev');if(pv)pv.textContent=prev();var pr=$('probar');if(pr)pr.href=link(SAMPLE);return}
+ if(t.id==='q'){F.q=t.value;drawRes()}else if(t.id==='pmin'){F.pmin=t.value;drawRes()}else if(t.id==='pmax'){F.pmax=t.value;drawRes()}});
+document.addEventListener('change',function(e){var t=e.target;if(t.id==='ord'){F.orden=t.value;drawRes()}else if(t.id==='fd'){F.disp=t.checked;drawRes()}});
+document.addEventListener('scroll',function(e){var k=e.target;if(!k||k.id!=='dvt')return;var i=Math.round(k.scrollLeft/k.clientWidth),c=$('dvc');if(c)c.textContent=(i+1)+'/'+k.children.length;var th=document.querySelectorAll('.thumbs img');for(var j=0;j<th.length;j++)th[j].className=j===i?'on':''},true);
+document.addEventListener('keydown',function(e){
+ if(e.key==='Enter'&&e.target.id&&e.target.id.indexOf('lg_')===0){var b=$('lg_ok');if(b&&b.click)b.click();return}
+ if(lb){if(e.key==='Escape')lbClose();else if(e.key==='ArrowLeft')lbStep(-1);else if(e.key==='ArrowRight')lbStep(1);return}
+ if(dv){if(e.key==='Escape')dvClose();return}
+ if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.o)dvOpen(Number(e.target.dataset.o))});
+function hashOpen(){var m=/^#par-(\d+)/.exec(location.hash||'');if(m){var id=Number(m[1]),p=find(id);if(p&&show(p))dvOpen(id)}}
+render();hashOpen();
+if(window.addEventListener)window.addEventListener('hashchange',hashOpen);
+if(window.claude&&claude.use){
+ claude.use('artifact').then(function(a){art=a},function(){});
+ claude.use('user').then(function(u){if(u&&u.canEdit&&u.canEdit()){canEdit=true;owner=!!(u.isOwner&&u.isOwner());var a=S.cfg.auth;if(a&&tokGet()===a.h)authed=true;render()}},function(){});
+}
+</script></body></html>
