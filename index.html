@@ -168,4 +168,168 @@ function loginUI(){
 function render(){
  document.title=S.cfg.nombre;theme();
  var h='<div class="wrap"><h1>'+esc(S.cfg.nombre)+'</h1><p class="sub">'+esc(S.cfg.tagline)+'</p>';
- h+=view==='cfg'?cfgHTML():ctrlHTML
+ h+=view==='cfg'?cfgHTML():ctrlHTML()+'<div id="res"></div>'+trustHTML()+footHTML();
+h+='</div>';if(canEdit&&admin)h+=barHTML();
+$('root').innerHTML=h;if(view!=='cfg')drawRes()}
+function ctrlHTML(){var base=S.items.filter(show),o=opts(base);
+ if(F.talla!=='Todas'&&(F.talla.charAt(0)==='H'?o.H:o.M).indexOf(F.talla.slice(2))<0)F.talla='Todas';
+ if(F.marca&&o.B.indexOf(F.marca)<0)F.marca='';
+ var c=function(a,v,t,on){return '<button class="chip" '+a+'="'+esc(v)+'" aria-pressed="'+on+'">'+esc(t)+'</button>'};
+ var h='<div class="tools"><input id="q" type="search" placeholder="'+esc(tx('search'))+'" value="'+esc(F.q)+'" aria-label="'+esc(tx('search'))+'"><select id="ord" aria-label="Ordenar">'+[['rec',tx('s_rec')],['pa',tx('s_pa')],['pd',tx('s_pd')]].map(function(x){return '<option value="'+x[0]+'"'+(F.orden===x[0]?' selected':'')+'>'+esc(x[1])+'</option>'}).join('')+'</select></div>';
+ if(o.H.length||o.M.length)h+='<div class="filters"><span class="fl">'+esc(tx('talla'))+'</span>'+c('data-ft','Todas',tx('todas'),F.talla==='Todas')+o.H.map(function(x){return c('data-ft','H:'+x,tx('hombre')+' '+x,F.talla==='H:'+x)}).join('')+o.M.map(function(x){return c('data-ft','M:'+x,tx('mujer')+' '+x,F.talla==='M:'+x)}).join('')+'</div>';
+ if(o.B.length)h+='<div class="filters"><span class="fl">'+esc(tx('marca'))+'</span>'+c('data-fm','',tx('todas'),!F.marca)+o.B.map(function(x){return c('data-fm',x,x,F.marca===x)}).join('')+'</div>';
+ h+='<div class="filters"><button class="chip" data-a="more" aria-pressed="'+fmore+'">'+esc(tx('more'))+'</button></div>';
+ if(fmore)h+='<div class="more"><div class="two"><label>'+esc(tx('desde'))+' ('+esc(mon())+')<input id="pmin" type="number" min="0" inputmode="numeric" value="'+esc(F.pmin)+'"></label><label>'+esc(tx('hasta'))+'<input id="pmax" type="number" min="0" inputmode="numeric" value="'+esc(F.pmax)+'"></label></div><label class="chk"><input type="checkbox" id="fd"'+(F.disp?' checked':'')+'> '+esc(tx('solo'))+'</label></div>';
+ return h}
+function card(p){var b=p.vendido?'<span class="badge">'+esc(tx('sold'))+'</span>':(admin&&p.ejemplo?'<span class="badge">Ejemplo</span>':(admin&&p.visible===false?'<span class="badge">Oculto</span>':(esNuevo(p)?'<span class="badge new">'+esc(tx('nuevo'))+'</span>':'')));
+ var pic=p.fotos.length?'<img src="'+p.fotos[0]+'" alt="'+esc(ttl(p))+'" loading="lazy" decoding="async">':shoe(colr(p));
+ var sz=[];if(p.tallaH)sz.push(tx('hombre')+' '+p.tallaH+' US');if(p.tallaM)sz.push(tx('mujer')+' '+p.tallaM+' US');
+ return '<article class="card'+(p.visible===false||p.ejemplo?' off':'')+'" data-o="'+p.id+'" tabindex="0" role="button" aria-label="'+esc(ttl(p))+'"><div class="pic" style="background:'+colr(p)+'22">'+pic+b+(p.fotos.length>1?'<span class="cnt">'+p.fotos.length+' fotos</span>':'')+'<span class="price">'+esc(mon())+esc(p.precio)+'</span></div><div class="body"><h2 class="name">'+esc(ttl(p))+'</h2>'+
+ '<p class="det">'+(p.cond?'<span class="pill'+pcls(p.cond)+'">'+esc(p.cond)+'</span>':'')+sz.map(function(x){return '<span class="sz">'+esc(x)+'</span>'}).join('')+'</p>'+
+ (p.cm?'<p class="cmx"><b>'+esc(p.cm)+' cm</b> '+esc(tx('cmnote'))+'</p>':'')+(p.estado?'<p class="est">'+esc(p.estado)+'</p>':'')+(p.fecha?'<p class="est sm">'+esc(fechaTxt(p))+'</p>':'')+
+ (p.vendido?'<span class="btn dis">'+esc(tx('sold'))+'</span>':'<a class="btn" href="'+link(p)+'" target="_blank" rel="noopener">'+esc(tx('wa'))+'</a>')+
+ (admin?'<div class="row"><button class="btn sec" data-e="'+p.id+'">Editar</button><button class="btn sec" data-d="'+p.id+'">Borrar</button></div>':'')+'</div></article>'}
+function drawRes(){var el=$('res');if(!el)return;var base=S.items.filter(show),v=results(),d=v.filter(function(p){return!p.vendido}).length,s=v.length-d,h='';
+ if(v.length){var c=[fmt(d===1?tx('c1'):tx('cn'),{n:d})];if(s&&!F.disp)c.push(fmt(s===1?tx('v1'):tx('vn'),{v:s}));h+='<p class="count" aria-live="polite">'+esc(c.join(' · '))+'</p><div class="grid">'+v.map(card).join('')+'</div>'}
+ else if(base.length)h='<div class="empty"><p>'+esc(tx('sinres'))+'</p><button class="btn sec" data-a="clr" style="display:inline-block;margin:0">'+esc(tx('clear'))+'</button></div>';
+ else h='<div class="empty"><p>'+(admin?'Aún no hay pares. Usa “+ Nuevo par”.':esc(tx('vacio')))+'</p></div>';
+ el.innerHTML=h}
+function trustHTML(){var c=S.cfg,b=[[tx('cr_t'),c.c_revisa],[tx('cc_t'),c.c_cambios],[tx('cp_t'),c.c_pago],[tx('ce_t'),c.c_envio]].filter(function(x){return x[1]&&x[1].trim()});if(!b.length)return '';return '<section class="trust"><h3>'+esc(tx('conf'))+'</h3><div class="tg">'+b.map(function(x){return '<div><strong>'+esc(x[0])+'</strong><p>'+esc(x[1])+'</p></div>'}).join('')+'</div></section>'}
+function footHTML(){var c=S.cfg,s=[['WhatsApp','https://wa.me/'+waNum()+(c.mensajeGen?'?text='+encodeURIComponent(c.mensajeGen):'')],['Facebook',soc('fb',c.fb)],['Instagram',soc('ig',c.ig)]].filter(function(x){return x[1]});return '<footer class="foot"><div class="soc">'+s.map(function(x){return '<a class="chip" href="'+esc(x[1])+'" target="_blank" rel="noopener">'+x[0]+'</a>'}).join('')+'</div><p>'+esc(c.pie)+'</p>'+(canEdit&&!admin?'<button class="lnk" data-a="on">Administrar</button>':'')+'</footer>'}
+function fld(f){var k=f[0],isK=f[3]==='k',v=isK?S.cfg[k]:tx(k),at=isK?'data-k="'+k+'"':'data-tx="'+k+'"';return '<label>'+f[1]+(f[2]>1?'<textarea '+at+' rows="'+f[2]+'">'+esc(v)+'</textarea>':'<input '+at+' value="'+esc(v)+'">')+'</label>'}
+function cfgHTML(){var c=S.cfg,a=c.auth,ex=S.items.some(function(p){return p.ejemplo}),
+ T=function(k,l,r,sm){return '<label>'+l+(sm?'<small>'+sm+'</small>':'')+'<textarea data-k="'+k+'" rows="'+r+'">'+esc(c[k])+'</textarea></label>'},
+ I=function(k,l,sm,x){return '<label>'+l+(sm?'<small>'+sm+'</small>':'')+'<input data-k="'+k+'" '+(x||'')+' value="'+esc(c[k])+'"></label>'},
+ V=['nombre','marca','talla','tallaH','tallaM','cm','condicion','estado','precio'];
+ return '<details class="panel" open><summary>Botón de WhatsApp</summary>'+
+ '<label>Texto del botón<input data-tx="wa" value="'+esc(tx('wa'))+'"></label>'+
+ '<label>Mensaje que recibe el cliente en WhatsApp<small>Se escribe solo al abrir el chat. Toca una variable para insertarla donde tengas el cursor.</small><textarea id="msgTa" data-k="mensaje" rows="3">'+esc(c.mensaje)+'</textarea></label>'+
+ '<div class="vars">'+V.map(function(v){return '<button class="chip" data-ins="{'+v+'}">{'+v+'}</button>'}).join('')+'</div>'+
+ '<p class="hint">Así lo verá el cliente: <b id="prev">'+esc(prev())+'</b></p>'+
+ I('whatsapp','Número de WhatsApp','Con código de país, solo números. El Salvador: 503 y tu número.','inputmode="numeric"')+
+ T('mensajeGen','Mensaje del botón de WhatsApp del pie',2,'Para quien te escribe sin elegir un par. Déjalo vacío para no enviar texto.')+
+ '<a class="btn sec" id="probar" target="_blank" rel="noopener" href="'+link(SAMPLE)+'">Probar mensaje en WhatsApp</a></details>'+
+ '<details class="panel" open><summary>Tienda</summary>'+I('nombre','Nombre de la tienda')+T('tagline','Texto de presentación',2,'')+T('pie','Texto al pie',2,'')+
+ I('mon','Símbolo de moneda','','style="max-width:120px"')+I('nuevoDias','Mostrar la etiqueta de pares nuevos durante (días)','','type="number" min="1" style="max-width:120px"')+
+ I('conds','Condiciones disponibles','Separadas por coma. Aparecen al editar un par.')+
+ '<div class="two"><label>Color principal<input type="color" data-k="color" value="'+esc(c.color)+'"></label><label>Color de la etiqueta de precio<input type="color" data-k="tag" value="'+esc(c.tag)+'"></label></div></details>'+
+ '<details class="panel"><summary>Enlace y redes</summary>'+I('url','Enlace público del catálogo','Pégalo cuando lo compartas. Se usa en el botón de compartir de cada par.')+I('fb','Facebook','Enlace o nombre de usuario')+I('ig','Instagram','Enlace o @usuario')+'</details>'+
+ G.map(function(g){return '<details class="panel"><summary>'+g[0]+'</summary>'+(g[1]?'<p class="hint">'+g[1]+'</p>':'')+g[2].map(fld).join('')+'</details>'}).join('')+
+ '<details class="panel"><summary>Acceso de administrador</summary><p class="hint">Usuario actual: <b>'+esc(a?a.u:'sin configurar')+'</b>. Es un candado para entrar al panel desde esta página; no reemplaza el permiso de tu cuenta de Claude.</p>'+
+ (a?'<label>Contraseña actual<input id="ac_p" type="password" autocomplete="current-password"></label>':'')+'<label>Usuario<input id="ac_u" value="'+esc(a?a.u:'')+'"></label><label>Nueva contraseña<small>Mínimo 8 caracteres</small><input id="ac_n" type="password" autocomplete="new-password"></label><label>Repite la nueva contraseña<input id="ac_n2" type="password" autocomplete="new-password"></label><button class="btn sec" data-a="chpw" style="margin:0">Cambiar acceso</button></details>'+
+ '<details class="panel"><summary>Restaurar</summary><button class="btn sec" data-a="rtx" style="margin:0">Restaurar los textos originales</button>'+(ex?'<p class="hint">Los pares de ejemplo solo los ves tú.</p><button class="btn sec" data-a="rmex" style="margin:0">Borrar pares de ejemplo</button>':'')+'</details><div style="height:90px"></div>'}
+function barHTML(){var n=doc().length,h='<div class="bar">'+(view==='cfg'?'<button class="btn sec" data-a="cat">Ver catálogo</button>':'<button class="btn sec" data-a="new">+ Nuevo par</button><button class="btn sec" data-a="cfg">Ajustes</button>');
+ return h+'<button class="btn" data-a="save"'+(dirty?'':' style="opacity:.5"')+'>'+(dirty?'Guardar y publicar':'Sin cambios')+'</button><button class="btn sec" data-a="off">Cerrar sesión</button><span class="mb'+(n>14e6?' warn':'')+'" title="Espacio usado por el catálogo">'+(n/1e6).toFixed(1)+' / 16 MB</span></div>'}
+function shrink(f){return new Promise(function(res){var r=new FileReader();r.onerror=function(){res(null)};r.onload=function(){var im=new Image();im.onerror=function(){res(null)};im.onload=function(){var s=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.7))};im.src=r.result};r.readAsDataURL(f)})}
+function drawPh(){var pv=$('pv');if(!pv||!ed)return;pv.innerHTML=ed.fotos.map(function(s,i){return '<div><img src="'+s+'" alt="Foto '+(i+1)+'">'+(i===0?'<span class="tag">Portada</span>':'<button class="cv" data-pc="'+i+'">Portada</button>')+'<button class="rm" data-px="'+i+'" aria-label="Quitar foto">&times;</button></div>'}).join('');$('pcount').textContent='('+ed.fotos.length+'/'+MAXF+')'}
+function addFiles(list){var arr=Array.prototype.slice.call(list),room=MAXF-ed.fotos.length;
+ if(room<=0){toast('Ya tienes '+MAXF+' fotos. Quita una para agregar otra.');return}
+ if(arr.length>room){toast('Máximo '+MAXF+' fotos por par. Se agregarán solo '+room+'.');arr=arr.slice(0,room)}
+ if(!arr.length)return;
+ $('pbusy').textContent='Procesando '+arr.length+' foto(s)…';
+ arr.reduce(function(pr,f){return pr.then(function(){return shrink(f)}).then(function(d){if(d&&ed&&ed.fotos.length<MAXF)ed.fotos.push(d)})},Promise.resolve()).then(function(){var b=$('pbusy');if(b)b.textContent='';drawPh()})}
+function modal(){var p=ed,cs=conds();if(p.cond&&cs.indexOf(p.cond)<0)cs=cs.concat([p.cond]);
+ var h='<div class="modal" id="md"><div class="panel"><strong>'+(p.id?'Editar par':'Nuevo par')+'</strong>'+
+ '<label>Título<small>Pon marca y modelo. Ej: Nike Pegasus 38</small><input id="f_nombre" value="'+esc(p.nombre)+'"></label>'+
+ '<label>Marca<input id="f_marca" placeholder="Nike, Adidas, Puma…" value="'+esc(p.marca)+'"></label>'+
+ '<div class="two"><label>Talla US hombre<input id="f_h" inputmode="decimal" placeholder="Ej: 9" value="'+esc(p.tallaH)+'"></label><label>Talla US mujer<input id="f_m" inputmode="decimal" placeholder="Ej: 10.5" value="'+esc(p.tallaM)+'"></label></div>'+
+ '<p class="hint">Suele ser mujer = hombre + 1.5, pero varía según la marca. Revisa la etiqueta del zapato.</p>'+
+ '<div class="two"><label>Medida del zapato (cm)<input id="f_cm" inputmode="decimal" placeholder="Ej: 27.5" value="'+esc(p.cm)+'"></label><label>Precio<input id="f_precio" type="number" min="0" value="'+esc(p.precio)+'"></label></div>'+
+ '<p class="hint">Medida: largo de la plantilla, de talón a punta.</p>'+
+ '<label>Condición<select id="f_cond">'+cs.map(function(c){return '<option'+(c===p.cond?' selected':'')+'>'+esc(c)+'</option>'}).join('')+'</select></label>'+
+ '<label>Detalles del estado<input id="f_estado" placeholder="Ej: 9/10, desgaste leve en la suela" value="'+esc(p.estado)+'"></label>'+
+ '<label>Descripción<textarea id="f_desc" rows="3">'+esc(p.desc)+'</textarea></label>'+
+ '<label>Fotos <span id="pcount"></span><small>La primera es la portada. Máximo '+MAXF+' por par.</small><input id="f_foto" type="file" accept="image/*" multiple></label>'+
+ '<p class="hint">Incluye siempre fotos de la suela, la etiqueta interior, la plantilla y cualquier desgaste. Eso da confianza y evita preguntas.</p><p class="hint" id="pbusy"></p><div class="ph" id="pv"></div>'+
+ '<label class="chk"><input type="checkbox" id="f_vend"'+(p.vendido?' checked':'')+'> Marcar como vendido</label><label class="chk"><input type="checkbox" id="f_vis"'+(p.visible!==false?' checked':'')+'> Visible en el catálogo</label>'+
+ '<div class="row"><button class="btn sec" id="m_x">Cancelar</button><button class="btn" id="m_ok">Aceptar</button></div></div></div>';
+ document.body.insertAdjacentHTML('beforeend',h);drawPh();
+ $('f_foto').onchange=function(e){addFiles(e.target.files);e.target.value=''};
+ $('m_x').onclick=function(){$('md').remove();ed=null};
+ $('m_ok').onclick=function(){
+  var dec=function(id){return $(id).value.trim().replace(',','.')};
+  if(!dec('f_h')&&!dec('f_m')){toast('Escribe al menos una talla (hombre o mujer).');return}
+  p.nombre=$('f_nombre').value.trim()||'Sin título';p.marca=$('f_marca').value.trim();p.tallaH=dec('f_h');p.tallaM=dec('f_m');p.cm=dec('f_cm');p.precio=Number($('f_precio').value)||0;p.cond=$('f_cond').value;p.estado=$('f_estado').value.trim();p.desc=$('f_desc').value.trim();p.vendido=$('f_vend').checked;p.visible=$('f_vis').checked;delete p.ejemplo;
+  if(!p.id){p.id=Date.now();p.fecha=p.id;S.items.unshift(p)}else{S.items=S.items.map(function(x){return x.id===p.id?p:x})}
+  dirty=true;$('md').remove();ed=null;render()};}
+function dvOpen(id){if(!S.items.some(function(x){return x.id===id}))return;dv=id;document.body.style.overflow='hidden';dvDraw();var g=$('dv');if(g)g.scrollTop=0}
+function dvDraw(){var p=S.items.find(function(x){return x.id===dv});if(!p){dvClose();return}
+ var o=$('dv');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="dv" id="dv" role="dialog" aria-modal="true" aria-label="'+esc(ttl(p))+'"></div>');o=$('dv')}
+ var f=p.fotos,row=function(l,v){return v?'<dt>'+esc(l)+'</dt><dd>'+esc(v)+'</dd>':''};
+ var cm=p.cm?'<dt>'+esc(tx('sp_cm'))+'</dt><dd class="dd">'+esc(p.cm)+' cm <button class="lnk" data-a="guia">'+esc(tx('guialink'))+'</button></dd>':'';
+ var gl=f.length?'<div class="dvg"><div class="trk" id="dvt">'+f.map(function(s,i){return '<img src="'+s+'" alt="'+esc(ttl(p))+' - foto '+(i+1)+'" data-z="'+i+'"'+(i>1?' loading="lazy"':'')+' decoding="async">'}).join('')+'</div>'+(f.length>1?'<span class="cnt" id="dvc">1/'+f.length+'</span><button class="nv pv" data-n="-1" aria-label="Foto anterior">&#8249;</button><button class="nv nx" data-n="1" aria-label="Foto siguiente">&#8250;</button>':'')+'</div>'+(f.length>1?'<div class="thumbs">'+f.map(function(s,i){return '<img src="'+s+'" alt="Foto '+(i+1)+'" data-t="'+i+'"'+(i?' loading="lazy"':' class="on"')+'>'}).join('')+'</div>':''):'<div class="dvg" style="display:grid;place-items:center;background:'+colr(p)+'22">'+shoe(colr(p))+'</div>';
+ var badges=(p.cond?'<span class="pill'+pcls(p.cond)+'">'+esc(p.cond)+'</span> ':'')+(p.vendido?'<span class="pill">'+esc(tx('sold'))+'</span>':(esNuevo(p)?'<span class="pill c1">'+esc(tx('nuevo'))+'</span>':''));
+ o.innerHTML='<div class="dvp"><button class="lbx dvx" data-dv="x" aria-label="Cerrar">&times;</button>'+gl+'<div class="dvb"><h2 class="name big">'+esc(ttl(p))+'</h2><p class="det">'+badges+'</p><p class="p2">'+esc(mon())+esc(p.precio)+'</p>'+
+ '<dl class="spec">'+row(tx('sp_h'),p.tallaH&&p.tallaH+' US')+row(tx('sp_m'),p.tallaM&&p.tallaM+' US')+cm+row(tx('sp_est'),p.estado)+row(tx('sp_marca'),p.marca)+'</dl>'+
+ (p.desc?'<p style="margin:0">'+esc(p.desc)+'</p>':'')+(tx('nota')?'<p class="hint">'+esc(tx('nota'))+'</p>':'')+(p.fecha?'<p class="hint">'+esc(fechaTxt(p))+'</p>':'')+
+ '<div class="row">'+(p.vendido?'<span class="btn dis">'+esc(tx('sold'))+'</span>':'<a class="btn" href="'+link(p)+'" target="_blank" rel="noopener">'+esc(tx('wa'))+'</a>')+'<button class="btn sec" data-sh="'+p.id+'">'+esc(tx('share'))+'</button></div></div></div>'}
+function dvClose(){var o=$('dv');if(o)o.remove();dv=null;lbClose();document.body.style.overflow=''}
+function lbOpen(i){var p=S.items.find(function(x){return x.id===dv});if(!p||!p.fotos.length)return;lb={f:p.fotos,i:i};lbDraw()}
+function lbDraw(){var o=$('lb');if(!o){document.body.insertAdjacentHTML('beforeend','<div class="lb" id="lb" role="dialog" aria-label="Foto ampliada"></div>');o=$('lb')}
+ o.innerHTML='<div class="lbs" id="lbs"><img src="'+lb.f[lb.i]+'" alt="Foto ampliada" data-zoom="1"></div><button class="lbx" data-lb="x" aria-label="Cerrar">&times;</button>'+(lb.f.length>1?'<button class="nv pv" data-lb="-1" aria-label="Anterior">&#8249;</button><button class="nv nx" data-lb="1" aria-label="Siguiente">&#8250;</button>':'')+'<span class="cnt lbc">'+(lb.i+1)+' / '+lb.f.length+'</span>'}
+function lbClose(){var o=$('lb');if(o)o.remove();lb=null}
+function lbStep(d){lb.i=(lb.i+d+lb.f.length)%lb.f.length;lbDraw()}
+function guia(){var st=String(tx('guia')).split('\n').filter(function(x){return x.trim()});document.body.insertAdjacentHTML('beforeend','<div class="modal" id="gd"><div class="panel"><strong>'+esc(tx('guiat'))+'</strong><ol class="steps">'+st.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ol>'+(tx('guianota')?'<p class="hint">'+esc(tx('guianota'))+'</p>':'')+'<div class="row"><button class="btn" id="gd_x">Cerrar</button></div></div></div>');$('gd_x').onclick=function(){$('gd').remove()}}
+function copyText(t){return new Promise(function(res,rej){var fb=function(){try{var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();var ok=document.execCommand('copy');a.remove();ok?res():rej()}catch(x){rej()}};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(res,fb)}else fb()})}
+function shareMsg(p){var u=(S.cfg.url||'').trim().split('#')[0];return tx('sharetxt')+' '+ttl(p)+' · '+tl(p)+(p.cm?' · '+p.cm+' cm':'')+' · '+mon()+p.precio+(u?'\n'+u+'#par-'+p.id:'')}
+function share(p){var m=shareMsg(p),manual=function(){document.body.insertAdjacentHTML('beforeend','<div class="modal" id="sh"><div class="panel"><strong>Copia y comparte</strong><textarea id="sht" rows="4" readonly>'+esc(m)+'</textarea><div class="row"><button class="btn" id="sh_x">Listo</button></div></div></div>');$('sht').select();$('sh_x').onclick=function(){$('sh').remove()}},
+ cp=function(){copyText(m).then(function(){toast('Mensaje copiado. Pégalo en WhatsApp o en tus redes.')},manual)};
+ if(navigator.share){navigator.share({title:ttl(p),text:m}).catch(function(e){if(!e||e.name!=='AbortError')cp()})}else cp();
+ if(admin&&!(S.cfg.url||'').trim())toast('Agrega el enlace del catálogo en Ajustes para que el mensaje lo incluya.')}
+function doc(){var st=$('app-style').textContent,sc=$('app-script').textContent;
+ return '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>'+esc(S.cfg.nombre)+'</title><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet"><style id="app-style">'+st+'</style></head><body><div id="root"></div><script type="application/json" id="state">'+JSON.stringify(S).replace(/</g,'\\u003c')+'<'+'/script><script id="app-script">'+sc+'<'+'/script></body></html>'}
+function find(id){return S.items.find(function(x){return x.id==id})}
+function markDirty(){dirty=true;var b=document.querySelector('[data-a=save]');if(b){b.style.opacity=1;b.textContent='Guardar y publicar'}}
+document.addEventListener('click',function(e){
+ var tg=e.target;
+ if(tg.id==='lb'||tg.id==='lbs'){lbClose();return}
+ if(tg.closest('a[href]'))return;
+ var t=tg.closest('[data-ft],[data-fm],[data-a],[data-e],[data-d],[data-n],[data-z],[data-t],[data-lb],[data-dv],[data-px],[data-pc],[data-sh],[data-zoom],[data-o],[data-ins]');if(!t)return;
+ var D=t.dataset;
+ if(D.zoom!=null){var s=$('lbs'),r=t.getBoundingClientRect(),fx=(e.clientX-r.left)/r.width,fy=(e.clientY-r.top)/r.height;if(t.classList.contains('zm'))t.classList.remove('zm');else{t.classList.add('zm');s.scrollLeft=fx*t.offsetWidth-s.clientWidth/2;s.scrollTop=fy*t.offsetHeight-s.clientHeight/2}return}
+ if(D.lb){if(D.lb==='x')lbClose();else lbStep(Number(D.lb));return}
+ if(D.ins){var ta=$('msgTa'),a0=ta.selectionStart==null?ta.value.length:ta.selectionStart,a1=ta.selectionEnd==null?a0:ta.selectionEnd;ta.value=ta.value.slice(0,a0)+D.ins+ta.value.slice(a1);S.cfg.mensaje=ta.value;ta.focus();ta.selectionStart=ta.selectionEnd=a0+D.ins.length;markDirty();var pv=$('prev');if(pv)pv.textContent=prev();var pr=$('probar');if(pr)pr.href=link(SAMPLE);return}
+ if(D.ft!=null){F.talla=D.ft;render();return}
+ if(D.fm!=null){F.marca=D.fm;render();return}
+ if(D.n){var k=t.closest('.dvg').querySelector('.trk');k.scrollBy({left:Number(D.n)*k.clientWidth,behavior:'smooth'});return}
+ if(D.t!=null){var k2=$('dvt');k2.scrollTo({left:Number(D.t)*k2.clientWidth,behavior:'smooth'});return}
+ if(D.z!=null){lbOpen(Number(D.z));return}
+ if(D.dv){dvClose();return}
+ if(D.sh){share(find(D.sh));return}
+ if(D.px!=null){ed.fotos.splice(Number(D.px),1);drawPh();return}
+ if(D.pc!=null){var f=ed.fotos.splice(Number(D.pc),1)[0];ed.fotos.unshift(f);drawPh();return}
+ if(D.e){ed=norm(JSON.parse(JSON.stringify(find(D.e))));modal();return}
+ if(D.d){ask('¿Borrar este par?',function(){S.items=S.items.filter(function(x){return x.id!=D.d});dirty=true;render()});return}
+ if(D.o){dvOpen(Number(D.o));return}
+ var a=D.a;
+ if(a==='on'){if(authed){admin=true;render()}else loginUI()}
+ else if(a==='off'){var out=function(){if(dirty){load();dirty=false}admin=false;authed=false;tokSet(null);view='cat';render()};if(dirty)ask('Hay cambios sin guardar. Si cierras sesión se pierden. ¿Cerrar igual?',out);else out()}
+ else if(a==='cfg'){view='cfg';render()}else if(a==='cat'){view='cat';render()}
+ else if(a==='more'){fmore=!fmore;render()}
+ else if(a==='clr'){F.q='';F.talla='Todas';F.marca='';F.pmin='';F.pmax='';F.disp=false;render()}
+ else if(a==='guia')guia();
+ else if(a==='rtx')ask('¿Restaurar todos los textos a su versión original?',function(){S.cfg.t={};dirty=true;render()});
+ else if(a==='rmex')ask('¿Borrar los pares de ejemplo?',function(){S.items=S.items.filter(function(x){return!x.ejemplo});dirty=true;render()});
+ else if(a==='chpw'){var u=$('ac_u').value.trim(),n=$('ac_n').value;
+  if(u.length<3){toast('El usuario debe tener al menos 3 caracteres.');return}if(n.length<8){toast('La nueva contraseña debe tener al menos 8 caracteres.');return}if(n!==$('ac_n2').value){toast('Las contraseñas nuevas no coinciden.');return}
+  if($('ac_p').value!==PASS_FIJA){toast('La contraseña actual no es correcta.');return}
+  PASS_FIJA=n;toast('Contraseña cambiada. Descarga el archivo y súbelo a GitHub para guardar el cambio.');markDirty()}
+ else if(a==='new'){ed={id:0,nombre:'',marca:'',tallaH:'',tallaM:'',cm:'',cond:conds()[1]||conds()[0],estado:'',precio:'',desc:'',fotos:[],vendido:false,visible:true};modal()}
+ else if(a==='save'){if(!dirty)return;
+  var d=doc();if(d.length>15.5e6){toast('El catálogo pesa demasiado. Quita fotos o pares viejos.');return}
+  var blob=new Blob([d],{type:'text/html'});var url=URL.createObjectURL(blob);var aEl=document.createElement('a');aEl.href=url;aEl.download='index.html';document.body.appendChild(aEl);aEl.click();document.body.removeChild(aEl);toast('Archivo descargado. Súbelo a GitHub para actualizar tu página.')}});
+document.addEventListener('input',function(e){var t=e.target,k=t.dataset&&t.dataset.k,x=t.dataset&&t.dataset.tx;
+ if(k||x){if(k)S.cfg[k]=t.value;else S.cfg.t[x]=t.value;markDirty();if(k==='color'||k==='tag')theme();
+  var pv=$('prev');if(pv)pv.textContent=prev();var pr=$('probar');if(pr)pr.href=link(SAMPLE);return}
+ if(t.id==='q'){F.q=t.value;drawRes()}else if(t.id==='pmin'){F.pmin=t.value;drawRes()}else if(t.id==='pmax'){F.pmax=t.value;drawRes()}});
+document.addEventListener('change',function(e){var t=e.target;if(t.id==='ord'){F.orden=t.value;drawRes()}else if(t.id==='fd'){F.disp=t.checked;drawRes()}});
+document.addEventListener('scroll',function(e){var k=e.target;if(!k||k.id!=='dvt')return;var i=Math.round(k.scrollLeft/k.clientWidth),c=$('dvc');if(c)c.textContent=(i+1)+'/'+k.children.length;var th=document.querySelectorAll('.thumbs img');for(var j=0;j<th.length;j++)th[j].className=j===i?'on':''},true);
+document.addEventListener('keydown',function(e){
+ if(e.key==='Enter'&&e.target.id&&e.target.id.indexOf('lg_')===0){var b=$('lg_ok');if(b&&b.click)b.click();return}
+ if(lb){if(e.key==='Escape')lbClose();else if(e.key==='ArrowLeft')lbStep(-1);else if(e.key==='ArrowRight')lbStep(1);return}
+ if(dv){if(e.key==='Escape')dvClose();return}
+ if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.o)dvOpen(Number(e.target.dataset.o))});
+function hashOpen(){var m=/^#par-(\d+)/.exec(location.hash||'');if(m){var id=Number(m[1]),p=find(id);if(p&&show(p))dvOpen(id)}}
+render();hashOpen();
+if(window.addEventListener)window.addEventListener('hashchange',hashOpen);
+</script></body></html>
