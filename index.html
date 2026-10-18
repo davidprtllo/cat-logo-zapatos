@@ -92,7 +92,7 @@ details.panel{display:block}details.panel>summary{font-weight:800;cursor:pointer
 </style></head><body><div id="root"></div>
 <script type="application/json" id="state">{"cfg":{"nombre":"Zapatos usados de marca","tagline":"Cada par es de segunda mano, está limpio y revisado. Toca un par para ver todas sus fotos y pedirlo por WhatsApp.","whatsapp":"50300000000","mensaje":"Hola, me interesa el par {nombre} ({talla}) por {precio}. ¿Sigue disponible?","pie":"Todos los pares son usados de segunda mano.","color":"#2540e8","url":"","fb":"","ig":"","c_revisa":"Cada par se limpia y se revisa antes de publicarlo. Las fotos muestran suela, etiqueta interior, plantilla y cualquier desgaste.","c_cambios":"Cambio por talla dentro de 3 días.","c_pago":"","c_envio":"Entregas en San Salvador y envíos a todo el país."},"items":[{"id":1,"nombre":"Pegasus","marca":"Nike","tallaH":"9","tallaM":"10.5","cm":"27.5","cond":"Muy bueno","estado":"9/10, desgaste leve en la suela","precio":35,"desc":"","fotos":[],"vendido":false,"visible":true,"fecha":1791806400000},{"id":2,"nombre":"Tenis casual blancos","marca":"Adidas","tallaH":"8.5","tallaM":"10","cm":"26.5","cond":"Bueno","estado":"8/10, plantilla nueva","precio":30,"desc":"","fotos":[],"vendido":false,"visible":true,"fecha":1791806400000},{"id":3,"nombre":"Zapato deportivo","marca":"Puma","tallaH":"10","tallaM":"11.5","cm":"28.5","cond":"Como nuevo","estado":"9/10, casi sin uso","precio":45,"desc":"","fotos":[],"vendido":true,"visible":true,"fecha":1791806400000}]}</script>
 <script id="app-script">
-var S,canEdit=false,owner=false,admin=false,authed=false,dirty=false,view='cat',ed=null,art=null,lb=null,dv=null,fmore=false,fails=0,lockT=0,
+var S,canEdit=true,owner=true,admin=false,authed=false,dirty=false,view='cat',ed=null,art=null,lb=null,dv=null,fmore=false,fails=0,lockT=0,
 F={q:'',talla:'Todas',marca:'',pmin:'',pmax:'',disp:false,orden:'rec'},MAXF=10,DIA=864e5,
 MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
 COL=['#2540e8','#0f8b8d','#c2410c','#6d28d9','#b91c5c'],DEFC='Como nuevo, Muy bueno, Bueno, Con detalles',
@@ -339,8 +339,4 @@ document.addEventListener('keydown',function(e){
 function hashOpen(){var m=/^#par-(\d+)/.exec(location.hash||'');if(m){var id=Number(m[1]),p=find(id);if(p&&show(p))dvOpen(id)}}
 render();hashOpen();
 if(window.addEventListener)window.addEventListener('hashchange',hashOpen);
-if(window.claude&&claude.use){
- claude.use('artifact').then(function(a){art=a},function(){});
- claude.use('user').then(function(u){if(u&&u.canEdit&&u.canEdit()){canEdit=true;owner=!!(u.isOwner&&u.isOwner());var a=S.cfg.auth;if(a&&tokGet()===a.h)authed=true;render()}},function(){});
-}
 </script></body></html>
