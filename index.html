@@ -159,4 +159,13 @@ function loginUI(){
   '<div class="row"><button class="btn sec" id="lg_x">Cancelar</button><button class="btn" id="lg_ok">Entrar</button></div></div></div>');
  $('lg_x').onclick=function(){$('lg').remove()};
  $('lg_ok').onclick=function(){
-  if(Date.now()<lockT){toast('Demasiados intentos. Espera '+Math.ceil
+  if(Date.now()<lockT){toast('Demasiados intentos. Espera '+Math.ceil((lockT-Date.now())/1000)+' segundos.');return}
+  var p=$('lg_p').value;
+  if(p===PASS_FIJA){fails=0;enter()}else{fails++;if(fails>=5){lockT=Date.now()+30000;fails=0}toast('Contraseña incorrecta.')}
+ }
+}
+/* ---------- vistas ---------- */
+function render(){
+ document.title=S.cfg.nombre;theme();
+ var h='<div class="wrap"><h1>'+esc(S.cfg.nombre)+'</h1><p class="sub">'+esc(S.cfg.tagline)+'</p>';
+ h+=view==='cfg'?cfgHTML():ctrlHTML
